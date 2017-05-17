@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+    
+<head>
+    <meta charset="UTF-8">
+    <title>stock calculator</title>
+    <script src="js/jquery.js"></script>
+    
+<style>
+    body {
+        /*background-color:#6f8ebc;*/
+        background: radial-gradient(#99a3ef,#5f70ef);
+        margin-top: 0;
+        /*color:black;*/
+        text-shadow: 0 0 3px #f7e3c5;
+        /*font-family:DFKai-sb;*/
+        font-family:Microsoft JhengHei;
+        font-size:18px;
+    }    
+    input{padding:5px 15px; border:2px black solid;
+        cursor:pointer;
+        border-radius: 5px;
+        width:8%;
+        color:blue;
+        font-weight: bold;
+    }
+    output{
+        color:#ed0427;
+        font-weight: bold;
+    }
+    button{padding:5px 15px; border:2px black solid;
+        cursor:pointer;
+        border-radius: 5px;
+        font-weight: bold;
+        background-color: #38f788;
+        font-family:Microsoft JhengHei;
+    }
+    div{
+        font-size:120%;
+        border-style:double;
+        border-color:#aaaaee;
+        border-radius: 8px;
+    }
+    h2{
+        /*background-color:#ead409;*/
+        color:blue;
+        text-shadow: 0 0 3px #49ed6c;
+        margin-top: 0;
+    }
+    span{
+        color:#fcf80c;
+        text-shadow: 0 0 3px #49ed6c;
+    }
+</style>    
+
+<script>
+    function calculator0(){ //除權後股價計算
+        var a = parseFloat($("#a").val()); //parseFloat將取出之字串轉換為數字,當初卡住的點!!
+        var b = parseFloat($("#b").val());
+        var c = parseFloat($("#c").val());
+        var o = Math.round((a-b) / ( 1 + c/10) *100)/100;
+        $('#result5').val(o);//除權後股價
+    }
+
+    var cash1,cash2,cash3,cash4,cash5;
+    var stock1,stock2,stock3,stock4,stock5;
+    var s1,s2,s3,s4,s5,c5;
+    var sum,sum1,sum2,sum3,sum4,sum5,sum6,initial;
+    
+    function calculator1(){
+         var initial = parseFloat($("#initial").val());
+         var cash1 = parseFloat($("#cash1").val());
+         var cash2 = parseFloat($("#cash2").val());
+         var cash3 = parseFloat($("#cash3").val());
+         var cash4 = parseFloat($("#cash4").val());
+         var cash5 = parseFloat($("#cash5").val());
+         var stock1 = parseFloat($("#stock1").val());
+         var stock2 = parseFloat($("#stock2").val());
+         var stock3 = parseFloat($("#stock3").val());
+         var stock4 = parseFloat($("#stock4").val());
+         var stock5 = parseFloat($("#stock5").val());   
+         
+         cashTotal = (cash1 +cash2 +cash3 +cash4 +cash5)*1000;//計算現股股利
+         
+         s1 = 1+stock1/10;//s1~s5計算股票股利
+         s2 = s1*(1+stock2/10);
+         s3 = s2*(1+stock3/10);
+         s4 = s3*(1+stock4/10);
+         s5 = s4*(1+stock5/10);
+         
+         sum0 = Math.round(cashTotal);//現金股利合計
+         sum1 = Math.round(s5*1000)-1000;//股票股利合計
+         sum2 = initial*(1000+sum1)/1000+sum0;//當下持股金額
+         sum3 = sum2*100/initial;//投資報酬率
+         sum4 = Math.round(sum3*100)/100  + '%';//投資報酬率,取小數點二位,再加上"%"符號
+         sum5 = Math.round(sum3*100)/10000;
+         sum6 = Math.round((Math.pow(sum5, 1/5)-1)*100*100)/100 + '%' ;//年化報酬率公式1/5次方
+         
+         $('#result').val(sum0);//現金股利
+         $('#result1').val(sum1);//股票股利
+         $('#result2').val(sum2);//當下持股金額
+         $('#result3').val(sum4);//投資報酬率
+         $('#result4').val(sum6);//年化報酬率
+         
+        //  sum0 = Math.round(cashTotal);//現金股利合計
+        //  sum = Math.round(s5*1000)-1000;
+        //  sum1 = initial*sum/1000+sum0;
+        //  sum2 = sum1*100/initial;
+        //  sum3 = Math.round(sum2*100)/100  + '%';
+        //  sum4 = Math.round(sum2*100)/10000;
+        //  sum5 = Math.round((Math.pow(sum4, 1/5)-1)*100*100)/100 + '%' ;
+         
+        //  $('#result').val(sum0);//現金股利合計
+        //  $('#result1').val(sum);//股票股利合計
+        //  $('#result2').val(sum1);//當下持股金額
+        //  $('#result3').val(sum3);//投資報酬率
+        //  $('#result4').val(sum5);//年化報酬率
+    }
+
+    
+    function inputValue(){ //示範功能,方便demo自動帶入值,亮點!!
+        $('#initial').val(18500);
+        $('#cash1').val(0.3);
+        $('#cash2').val(0.28);
+        $('#cash3').val(0.43);
+        $('#cash4').val(0.43);
+        $('#cash5').val(0.49);
+        $('#stock1').val(1);
+        $('#stock2').val(0.89);
+        $('#stock3').val(0.87);
+        $('#stock4').val(1);
+        $('#stock5').val(0.74);
+    }
+    
+</script>
+</head>
+
+<body>
+    <div id="DIVA" style="text-align:center">
+    <h2>除權息後股價計算</h2>
+    <form id="form1" oninput="calculator0()">
+          前日股價:<input id="a" type="number" step="0.1"><br>
+          現金股利:<input id="b" type="number" step="0.1"><br> 
+          股票股利:<input id="c" type="number" step="0.1"><br>
+          <span>除權後股價:</span><output id="result5" type =""></output><br>
+           <button type="button" onclick="calculator1()">計算</button>
+           <button type="reset" value="reset">重新計算</button>
+    </form>
+    </div>
+    
+    <div id="DIVB" style="text-align:center">
+    <h2>股利報酬率計算</h2>
+    <form id="form2">
+            原始投入金額:<input id="initial"  type="number" min="0" value="0">元<br>
+            第一年現金股利:<input id="cash1"  type="number" min="0" value="0">元；
+            第一年股票股利:<input id="stock1" type="number" min="0" value="0">元<br>
+            第二年現金股利:<input id="cash2"  type="number" min="0" value="0">元；
+            第二年股票股利:<input id="stock2" type="number" min="0" value="0">元<br>
+            第三年現金股利:<input id="cash3"  type="number" min="0" value="0">元；
+            第三年股票股利:<input id="stock3" type="number" min="0" value="0">元<br>
+            第四年現金股利:<input id="cash4"  type="number" min="0" value="0">元；
+            第四年股票股利:<input id="stock4" type="number" min="0" value="0">元<br>
+            第五年現金股利:<input id="cash5"  type="number" min="0" value="0">元；
+            第五年股票股利:<input id="stock5" type="number" min="0" value="0">元<br>
+
+            <span>
+            現金股利金額:<output id="result"></output>元<br>
+            股票股利合計:<output id="result1"></output>股<br>
+            當下持股金額:<output id="result2"></output>元<br>
+            <span title="投資報酬率=(當下持股金額-原始投入金額)/原始投入金額">投資報酬率:</span><output id="result3"></output><br>
+            <span title="(當下持股金額/原始投入金額)^(1/年數)-1">年化報酬率:</span><output id="result4"></output><br>
+            </span>
+            <button type="button" onclick="calculator1()">計算</button>
+            <button type="reset" value="reset">重新計算</button>
+            <button type="button" onclick="inputValue()">示範</button>
+    </form>
+    </div>
+    
+</body>
+</html>
